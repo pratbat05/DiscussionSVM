@@ -2,11 +2,6 @@
 
 This project analyzes the sentiment of developer discussions from GitHub issue comments using basic machine learning techniques. It implements both Logistic Regression and Support Vector Machine (SVM) classifiers to categorize comments as positive, negative, or neutral.
 
-- Fetches GitHub issue comments using the GitHub API
-- Preprocesses text data for machine learning
-- Implements two ML models: Logistic Regression and SVM
-- Compares model performance metrics
-- Provides sentiment prediction for new comments
 
 1. Clone this repository
 2. Install dependencies:
