@@ -12,7 +12,7 @@ class GitHubDataCollector:
         self.headers = {'Authorization': f'token {self.token}'}
         self.base_url = 'https://api.github.com'
 
-    def fetch_issue_comments(self, repos, max_comments_per_repo=100):
+    def fetch_issue_comments(self, repos, max_comments_per_repo=200):
         """
         Fetch issue comments from specified GitHub repositories
         repos: list of strings in format 'owner/repo'
@@ -20,6 +20,7 @@ class GitHubDataCollector:
         all_comments = []
         
         for repo in repos:
+            print(f"Fetching comments from {repo}...")
             url = f"{self.base_url}/repos/{repo}/issues/comments"
             params = {
                 'per_page': max_comments_per_repo,
@@ -38,6 +39,7 @@ class GitHubDataCollector:
                         'created_at': comment['created_at'],
                         'user': comment['user']['login']
                     })
+                print(f"Fetched {len(comments)} comments from {repo}")
             else:
                 print(f"Error fetching comments from {repo}: {response.status_code}")
 
@@ -50,13 +52,45 @@ class GitHubDataCollector:
         print(f"Data saved to {output_path}")
 
 def main():
-    # List of popular repositories to analyze
+    # List of diverse, active repositories for better training data
     repos = [
+        # Popular frameworks and libraries
         'tensorflow/tensorflow',
-        'pytorch/pytorch',
+        'pytorch/pytorch', 
         'microsoft/vscode',
         'django/django',
-        'flutter/flutter'
+        'flutter/flutter',
+        'facebook/react',
+        'vuejs/vue',
+        'angular/angular',
+        'nodejs/node',
+        'python/cpython',
+        
+        # Developer tools and platforms
+        'microsoft/TypeScript',
+        'rust-lang/rust',
+        'golang/go',
+        'kubernetes/kubernetes',
+        'docker/compose',
+        'hashicorp/terraform',
+        'ansible/ansible',
+        'jenkinsci/jenkins',
+        
+        # Popular applications
+        'mozilla/firefox',
+        'atom/atom',
+        'sublimehq/Packages',
+        'brave/brave-browser',
+        'signalapp/Signal-Desktop',
+        'telegramdesktop/tdesktop',
+        
+        # Data science and ML
+        'pandas-dev/pandas',
+        'numpy/numpy',
+        'scikit-learn/scikit-learn',
+        'matplotlib/matplotlib',
+        'plotly/plotly.py',
+        'streamlit/streamlit'
     ]
 
     collector = GitHubDataCollector()
