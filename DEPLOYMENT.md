@@ -1,23 +1,19 @@
-# Deployment Guide - Vercel
+# Deploying to Vercel
 
-This guide will help you deploy your sentiment analysis API to Vercel.
+This guide will help you deploy your Flask sentiment analysis application to Vercel.
 
 ## Prerequisites
 
-1. **Vercel Account**: Sign up at [vercel.com](https://vercel.com)
-2. **Vercel CLI**: Install with `npm i -g vercel`
-3. **GitHub Repository**: Your project should be pushed to GitHub
+1. **Vercel CLI**: Install the Vercel CLI globally
+   ```bash
+   npm install -g vercel
+   ```
 
-## Files Created for Deployment
-
-- `app.py` - Flask API server
-- `vercel.json` - Vercel configuration
-- `static/index.html` - Web interface
-- `requirements.txt` - Updated with Flask dependency
+2. **Vercel Account**: Sign up for a free account at [vercel.com](https://vercel.com)
 
 ## Deployment Steps
 
-### 1. Install Vercel CLI
+### 1. Install Vercel CLI (if not already installed)
 ```bash
 npm install -g vercel
 ```
@@ -27,48 +23,67 @@ npm install -g vercel
 vercel login
 ```
 
-### 3. Deploy from your project directory
+### 3. Deploy the Application
+From your project root directory, run:
 ```bash
 vercel
 ```
 
-### 4. Follow the prompts:
-- Set up and deploy? → **Y**
-- Which scope? → Select your account
-- Link to existing project? → **N**
-- Project name? → `sentiment-analysis-api` (or your preferred name)
-- Directory? → **./** (current directory)
-- Override settings? → **N**
+### 4. Follow the Prompts
+- **Set up and deploy**: Choose `Y`
+- **Which scope**: Select your account
+- **Link to existing project**: Choose `N` (for first deployment)
+- **Project name**: Enter a name for your project (e.g., `sentiment-analysis-api`)
+- **In which directory is your code located**: Press Enter (current directory)
+- **Want to override the settings**: Choose `N`
 
-### 5. Deploy to production
-```bash
-vercel --prod
+### 5. Wait for Deployment
+Vercel will:
+- Upload your files
+- Install dependencies
+- Build the application
+- Deploy to a production URL
+
+### 6. Access Your Application
+Once deployment is complete, you'll get:
+- **Production URL**: `https://your-project-name.vercel.app`
+- **Preview URL**: For testing changes
+
+## Project Structure for Vercel
+
+The deployment uses this structure:
+```
+├── api/
+│   ├── index.py          # Main Flask application
+│   └── requirements.txt  # Python dependencies
+├── models/
+│   └── svm.pkl          # Trained model
+├── static/
+│   └── index.html       # Frontend interface
+├── vercel.json          # Vercel configuration
+└── .vercelignore        # Files to exclude
 ```
 
 ## API Endpoints
 
-Once deployed, your API will have these endpoints:
+After deployment, your API will be available at:
+- **Homepage**: `https://your-project-name.vercel.app/`
+- **API Info**: `https://your-project-name.vercel.app/api`
+- **Health Check**: `https://your-project-name.vercel.app/health`
+- **Predict**: `https://your-project-name.vercel.app/predict` (POST)
+- **Batch Predict**: `https://your-project-name.vercel.app/predict_batch` (POST)
 
-- **`/`** - Web interface for testing
-- **`/api`** - API information
-- **`/health`** - Health check
-- **`/predict`** - Single text sentiment analysis
-- **`/predict_batch`** - Batch sentiment analysis
+## Testing the Deployment
 
-## Testing the API
+1. **Visit the homepage**: Open your production URL in a browser
+2. **Test the API**: Use the web interface to analyze sentiment
+3. **API testing**: Use tools like Postman or curl to test endpoints
 
-### Web Interface
-Visit your deployed URL to use the web interface.
-
-### API Testing
+### Example API Call
 ```bash
-# Single prediction
-curl -X POST https://your-app.vercel.app/predict \
+curl -X POST https://your-project-name.vercel.app/predict \
   -H "Content-Type: application/json" \
-  -d '{"text": "This feature is amazing! It works perfectly."}'
-
-# Health check
-curl https://your-app.vercel.app/health
+  -d '{"text": "This feature is amazing!"}'
 ```
 
 ## Environment Variables
@@ -81,36 +96,42 @@ If you need to add environment variables:
 
 ## Troubleshooting
 
-### Model Loading Issues
-- Ensure `models/svm.pkl` is included in your repository
-- Check that the model file is not too large (Vercel has size limits)
+### Common Issues
 
-### Build Errors
-- Check that all dependencies are in `requirements.txt`
-- Ensure Python version compatibility
+1. **Model Loading Error**: Ensure `models/svm.pkl` is in the correct location
+2. **Dependencies**: Check that all packages in `api/requirements.txt` are compatible
+3. **Function Timeout**: The function timeout is set to 30 seconds in `vercel.json`
 
-### API Errors
-- Check the `/health` endpoint to verify model loading
-- Review Vercel function logs in the dashboard
+### Debugging
 
-## Custom Domain (Optional)
+1. **Check Vercel logs**: Use `vercel logs` to view deployment logs
+2. **Local testing**: Test locally with `vercel dev` before deploying
+3. **Function logs**: Check function logs in the Vercel dashboard
 
-1. Go to your Vercel dashboard
-2. Select your project
-3. Go to Settings → Domains
-4. Add your custom domain
+## Updating the Deployment
+
+To update your deployment:
+```bash
+vercel --prod
+```
+
+## Cost Considerations
+
+- **Free Tier**: 100GB-hours per month
+- **Serverless Functions**: Pay per execution
+- **Bandwidth**: 100GB per month included
+
+## Support
+
+- [Vercel Documentation](https://vercel.com/docs)
+- [Vercel Python Runtime](https://vercel.com/docs/runtimes#official-runtimes/python)
+- [Flask on Vercel](https://vercel.com/guides/flask)
 
 ## Monitoring
 
 - **Vercel Dashboard**: Monitor deployments and function logs
 - **Analytics**: View usage statistics in the dashboard
 - **Logs**: Check function execution logs for debugging
-
-## Cost Considerations
-
-- Vercel has a generous free tier
-- Serverless functions have execution time limits
-- Monitor usage to avoid unexpected charges
 
 ## Security Notes
 
