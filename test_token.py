@@ -11,7 +11,7 @@ if token:
 
 headers = {'Authorization': f'token {token}'} if token else {}
 
-# Test with a simple public API call
+
 response = requests.get('https://api.github.com/user', headers=headers)
 print(f"Status code: {response.status_code}")
 
