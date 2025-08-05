@@ -4,12 +4,12 @@ import pandas as pd
 import os
 from dotenv import load_dotenv
 
-# Load environment variables
+
 load_dotenv()
 
 app = Flask(__name__, static_folder='static')
 
-# Load the trained model
+
 try:
     model = joblib.load('models/svm.pkl')
     print("Model loaded successfully!")
